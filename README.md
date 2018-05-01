@@ -18,3 +18,8 @@ kubectl create -n $LOGCACHENS secret generic tls --from-file=$PWD/output
 ```
 kubectl -n $LOGCACHENS  create -f ./kubernetes
 ```
+
+## Scale
+```
+kubectl -n $LOGCACHENS  scale statefulset logcache --replicas=2
+```
