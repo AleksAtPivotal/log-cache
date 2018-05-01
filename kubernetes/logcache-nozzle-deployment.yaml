@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: logcache-nozzle
+  name: logcache-nozzle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: logcache-nozzle
+  template:
+    metadata:
+      labels:
+        run: logcache-nozzle
+    spec:
+      containers:
+      - image: loggregator/log-cache-nozzle
+        imagePullPolicy: Always
+        name: logcache-nozzle
+        volumeMounts:
+        - name: tls
+          readOnly: true
+          mountPath: "/srv/certs"
+      volumes:
+      - name: tls
+        secret:
+          secretName: tls
+      

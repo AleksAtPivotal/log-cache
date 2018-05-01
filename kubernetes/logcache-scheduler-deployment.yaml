@@ -1,0 +1,36 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    run: logcache-scheduler
+  name: logcache-scheduler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: logcache-scheduler
+  template:
+    metadata:
+      labels:
+        run: logcache-scheduler
+    spec:
+      containers:
+      - image: loggregator/log-cache-scheduler
+        imagePullPolicy: Always
+        name: logcache-scheduler
+        ports:
+        - containerPort: 8082
+        env:
+        - name: NODE_ADDRS
+          valueFrom:
+            configMapKeyRef:
+              name: log-cache
+              key: NODE_ADDRS
+        volumeMounts:
+        - name: tls
+          readOnly: true
+          mountPath: "/srv/certs"
+      volumes:
+      - name: tls
+        secret:
+          secretName: tls
